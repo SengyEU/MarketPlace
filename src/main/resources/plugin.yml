@@ -1,0 +1,4 @@
+name: MarketPlace
+version: '${project.version}'
+main: cz.sengycraft.marketplace.MarketPlace
+api-version: '1.20'
