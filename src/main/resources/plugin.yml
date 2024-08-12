@@ -1,4 +1,4 @@
 name: MarketPlace
 version: '${project.version}'
-main: cz.sengycraft.marketplace.MarketPlace
+main: cz.sengycraft.marketplace.MarketPlacePlugin
 api-version: '1.20'
