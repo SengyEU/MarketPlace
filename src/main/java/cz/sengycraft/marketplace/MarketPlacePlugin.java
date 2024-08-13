@@ -1,21 +1,44 @@
 package cz.sengycraft.marketplace;
 
+import cz.sengycraft.marketplace.commands.MarketPlaceReloadCommand;
+import cz.sengycraft.marketplace.commands.SellCommand;
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
+import cz.sengycraft.marketplace.storage.DatabaseManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public final class MarketPlacePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ConfigurationManager.getInstance().setPlugin(this);
+
+        ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+
+        configurationManager.setPlugin(this);
         try {
-            ConfigurationManager.getInstance().initializeConfigurations("config.yml", "marketplace.yml", "blackmarket.yml");
+            configurationManager.initializeConfigurations("config", "messages");
         } catch (IOException e) {
             getLogger().severe("Couldn't load configuration files! The plugin will now disable!");
             getServer().getPluginManager().disablePlugin(this);
         }
+
+        DatabaseManager databaseManager = DatabaseManager.getInstance();
+
+        databaseManager.setPlugin(this);
+        databaseManager.init(
+                configurationManager.getConfiguration("config").getString("database.mongo-client-uri"),
+                configurationManager.getConfiguration("config").getString("database.database-name")
+        );
+
+        Objects.requireNonNull(getCommand("sell")).setExecutor(new SellCommand());
+        Objects.requireNonNull(getCommand("marketplacereload")).setExecutor(new MarketPlaceReloadCommand(this));
+    }
+
+    @Override
+    public void onDisable() {
+        DatabaseManager.getInstance().close();
     }
 
 

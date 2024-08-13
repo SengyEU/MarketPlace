@@ -1,0 +1,12 @@
+commands:
+  sell:
+    usage: "<dark_red>/sell <price>"
+  reload:
+    error: "<red>Couldn't reload configs. Check console for more details!"
+    success: "<green>Reloaded!"
+  usage: "<red>Usage: {usage}"
+  player-only: "<red>This command can be only used by players!"
+  no-permission: "You don't have permission to use this command!"
+
+# DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
+config-version: 2

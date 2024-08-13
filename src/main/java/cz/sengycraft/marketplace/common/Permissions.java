@@ -5,7 +5,8 @@ public enum Permissions {
     SELL("sell"),
     VIEW("view"),
     BLACKMARKET("blackmarket"),
-    HISTORY("history");
+    HISTORY("history"),
+    RELOAD("reload");
 
     private final String permission;
 

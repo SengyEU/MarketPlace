@@ -1,0 +1,7 @@
+database:
+  mongo-client-uri: "mongodb+srv://exampleUser:examplePassword@cluster0.example.mongodb.net/"
+  database-name: "marketplace"
+  items-collection-name: "items"
+
+# DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
+config-version: 1

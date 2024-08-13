@@ -10,7 +10,6 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -32,9 +31,9 @@ public class ConfigurationManager {
 
     private final HashMap<String, YamlDocument> configurations = new HashMap<>();
 
-    public void initializeConfigurations(String ... fileNames) throws IOException {
-        for(String fileName : fileNames){
-            YamlDocument yamlDocument = YamlDocument.create(new File(fileName + ".yml"),
+    public void initializeConfigurations(String... fileNames) throws IOException {
+        for (String fileName : fileNames) {
+            YamlDocument yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), fileName + ".yml"),
                     Objects.requireNonNull(plugin.getResource(fileName + ".yml")),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
@@ -52,6 +51,12 @@ public class ConfigurationManager {
 
     public YamlDocument getConfiguration(String name) {
         return configurations.get(name);
+    }
+
+    public void reloadConfigurations() throws IOException {
+        for (YamlDocument configuration : configurations.values()) {
+            configuration.reload();
+        }
     }
 
 }

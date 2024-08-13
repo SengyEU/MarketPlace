@@ -2,3 +2,16 @@ name: MarketPlace
 version: '${project.version}'
 main: cz.sengycraft.marketplace.MarketPlacePlugin
 api-version: '1.20'
+commands:
+  sell:
+    description: "Lists the item in players hand in the marketplace for sale"
+    permission: marketplace.sell
+  marketplacereload:
+    description: "Reloads all configuration files"
+    permission: marketplace.reload
+
+permissions:
+  marketplace.sell:
+    description: "Acces to /sell command"
+  marketplace.reload:
+    description: "Acces to /marketplacereload command"
