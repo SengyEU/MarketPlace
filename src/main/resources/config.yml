@@ -3,5 +3,9 @@ database:
   database-name: "marketplace"
   items-collection-name: "items"
 
+commands:
+  sell:
+    price-tabcomplete: "<price>"
+
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 1
+config-version: 2
