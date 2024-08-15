@@ -1,5 +1,6 @@
 package cz.sengycraft.marketplace;
 
+import cz.sengycraft.marketplace.commands.MarketPlaceCommand;
 import cz.sengycraft.marketplace.commands.MarketPlaceReloadCommand;
 import cz.sengycraft.marketplace.commands.SellCommand;
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
@@ -34,6 +35,7 @@ public final class MarketPlacePlugin extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("sell")).setExecutor(new SellCommand());
         Objects.requireNonNull(getCommand("marketplacereload")).setExecutor(new MarketPlaceReloadCommand(this));
+        Objects.requireNonNull(getCommand("marketplace")).setExecutor(new MarketPlaceCommand());
     }
 
     @Override

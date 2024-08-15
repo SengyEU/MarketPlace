@@ -9,9 +9,14 @@ commands:
   marketplacereload:
     description: "Reloads all configuration files"
     permission: marketplace.reload
+  marketplace:
+    description: "Displays a list of all items currently for sale in the marketplace"
+    permission: marketplace.view
 
 permissions:
   marketplace.sell:
-    description: "Acces to /sell command"
+    description: "Access to /sell command"
   marketplace.reload:
-    description: "Acces to /marketplacereload command"
+    description: "Access to /marketplacereload command"
+  marketplace.view:
+    description: "Access to /marketplace command"

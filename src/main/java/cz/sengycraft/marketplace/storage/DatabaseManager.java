@@ -11,6 +11,9 @@ import cz.sengycraft.marketplace.MarketPlacePlugin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +54,17 @@ public class DatabaseManager {
     public Document findDocument(String collectionName, String key, String value) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         return collection.find(Filters.eq(key, value)).first();
+    }
+
+    public List<Document> getAllDocuments(String collectionName) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        List<Document> documents = new ArrayList<>();
+
+        for (Document document : collection.find()) {
+            documents.add(document);
+        }
+
+        return documents;
     }
 
     public void updateDocument(String collectionName, String key, String value, String updateKey, String updateValue) {
