@@ -17,7 +17,7 @@ public class MarketPlaceCommand implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player) sender;
 
-        MarketPlaceGUI.getMarketPlaceGUI(player).open(player);
+        new MarketPlaceGUI().getMarketPlaceGUI(player).open(player);
 
         return true;
     }
