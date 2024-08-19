@@ -4,6 +4,7 @@ import cz.sengycraft.marketplace.commands.MarketPlaceCommand;
 import cz.sengycraft.marketplace.commands.MarketPlaceReloadCommand;
 import cz.sengycraft.marketplace.commands.SellCommand;
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
+import cz.sengycraft.marketplace.listeners.MacroListener;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +33,8 @@ public final class MarketPlacePlugin extends JavaPlugin {
                 configurationManager.getConfiguration("config").getString("database.mongo-client-uri"),
                 configurationManager.getConfiguration("config").getString("database.database-name")
         );
+
+        getServer().getPluginManager().registerEvents(new MacroListener(), this);
 
         Objects.requireNonNull(getCommand("sell")).setExecutor(new SellCommand());
         Objects.requireNonNull(getCommand("marketplacereload")).setExecutor(new MarketPlaceReloadCommand(this));

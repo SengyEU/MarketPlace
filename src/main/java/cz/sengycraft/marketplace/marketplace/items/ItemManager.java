@@ -36,7 +36,7 @@ public class ItemManager {
         List<ItemData> items = new ArrayList<>();
 
         for (Document document : databaseManager.getAllDocuments(itemsCollectionName)) {
-            items.add(new ItemData(document.get("item", org.bson.types.Binary.class).getData(), document.getInteger("price"), document.getString("seller")));
+            items.add(new ItemData(document.getObjectId("_id").toHexString(), document.get("item", org.bson.types.Binary.class).getData(), document.getInteger("price"), document.getString("seller")));
         }
 
         return items;

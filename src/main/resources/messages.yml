@@ -3,13 +3,16 @@ commands:
     usage: "<dark_red>/sell <price>"
     no-item: "<red>You don't have an item in your main hand!"
     invalid-price: "<red>Invalid price! Please input a positive integer!"
-    success: "<green>Successfully listed {itemCount}x {itemName}<green> for <gold>{price}$ <green>on the marketplace!" # Placeholders: {count}, {itemName}, {price}
+    success: "<green>Successfully listed <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>on the marketplace!" # Placeholders: {count}, {itemName}, {price}
   reload:
     error: "<red>Couldn't reload configs. Check console for more details!"
     success: "<green>Reloaded!"
+  marketplace:
+    item-not-available: "<red>This item is no longer available!"
+    your-item: "<red>You can't purchase your own item!"
   usage: "<red>Usage: {usage}" # Placeholders: {usage}
   player-only: "<red>This command can be only used by players!"
   no-permission: "You don't have permission to use this command!"
 
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 4
+config-version: 6

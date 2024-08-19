@@ -1,24 +1,33 @@
 package cz.sengycraft.marketplace.utils;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ComponentUtils {
 
     public static Component deserialize(String message) {
-        return MiniMessage.miniMessage().deserialize(message);
+
+        return MiniMessage.miniMessage().deserialize(message)
+                .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+                .decorationIfAbsent(TextDecoration.BOLD, TextDecoration.State.FALSE)
+                .decorationIfAbsent(TextDecoration.OBFUSCATED, TextDecoration.State.FALSE)
+                .decorationIfAbsent(TextDecoration.STRIKETHROUGH, TextDecoration.State.FALSE)
+                .decorationIfAbsent(TextDecoration.UNDERLINED, TextDecoration.State.FALSE);
+    }
+
+    public static List<Component> deserialize(List<String> lines) {
+        return lines.stream().map(ComponentUtils::deserialize).collect(Collectors.toList());
     }
 
     public static String serialize(Component component) {
         return MiniMessage.miniMessage().serialize(component);
-    }
-
-    public static Component getItemName(ItemStack itemStack) {
-        return Optional.ofNullable(itemStack.getItemMeta().displayName())
-                .orElse(Component.translatable(itemStack.getType()));
     }
 
 }

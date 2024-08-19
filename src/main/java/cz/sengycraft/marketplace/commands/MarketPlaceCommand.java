@@ -1,6 +1,6 @@
 package cz.sengycraft.marketplace.commands;
 
-import cz.sengycraft.marketplace.marketplace.MarketPlaceGUI;
+import cz.sengycraft.marketplace.marketplace.gui.MarketPlaceGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -17,7 +17,7 @@ public class MarketPlaceCommand implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player) sender;
 
-        MarketPlaceGUI.getMarketPlaceGUI().open(player);
+        MarketPlaceGUI.getMarketPlaceGUI(player).open(player);
 
         return true;
     }

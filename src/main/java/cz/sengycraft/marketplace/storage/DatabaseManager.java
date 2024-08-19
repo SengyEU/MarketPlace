@@ -14,6 +14,7 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +52,7 @@ public class DatabaseManager {
         collection.insertOne(document);
     }
 
-    public Document findDocument(String collectionName, String key, String value) {
+    public Document findDocument(String collectionName, String key, Object value) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         return collection.find(Filters.eq(key, value)).first();
     }
@@ -74,7 +75,7 @@ public class DatabaseManager {
         collection.updateOne(filter, updateOperation);
     }
 
-    public void deleteDocument(String collectionName, String key, String value) {
+    public void deleteDocument(String collectionName, String key, Object value) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         collection.deleteOne(Filters.eq(key, value));
     }

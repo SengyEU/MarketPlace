@@ -4,10 +4,7 @@ import cz.sengycraft.marketplace.common.Permissions;
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
 import cz.sengycraft.marketplace.marketplace.items.ItemData;
 import cz.sengycraft.marketplace.marketplace.items.ItemManager;
-import cz.sengycraft.marketplace.utils.ComponentUtils;
-import cz.sengycraft.marketplace.utils.IntegerUtils;
-import cz.sengycraft.marketplace.utils.MessageUtils;
-import cz.sengycraft.marketplace.utils.Pair;
+import cz.sengycraft.marketplace.utils.*;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -72,7 +69,7 @@ public class SellCommand implements TabExecutor {
                 sender,
                 "commands.sell.success",
                 new Pair<>("{itemCount}", String.valueOf(itemInMainHand.getAmount())),
-                new Pair<>("{itemName}", ComponentUtils.serialize(ComponentUtils.getItemName(itemInMainHand))),
+                new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(itemInMainHand))),
                 new Pair<>("{price}", args[0])
         );
 
