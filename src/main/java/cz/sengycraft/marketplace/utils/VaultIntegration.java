@@ -4,6 +4,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -27,11 +28,7 @@ public class VaultIntegration {
         econ = rsp.getProvider();
     }
 
-    public static double getMoney(Player player) {
-        return econ.getBalance(player);
-    }
-
-    public static void changeBalance(Player player, double amount) {
+    public static void changeBalance(OfflinePlayer player, double amount) {
         if(amount == 0) return;
 
         if(amount < 0) {
