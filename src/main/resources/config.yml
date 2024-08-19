@@ -42,6 +42,26 @@ gui:
       material: NETHER_STAR
       custom-model-data: 1001
       slot: 49
+  confirmation:
+    title: "<green>Confirm purchase: <gold>{itemName}" # Placeholders: {itemName}
+    rows: 3
+    item-for-sale:
+      slot: 13
+    confirm:
+      title: "<green>Confirm"
+      material: GREEN_WOOL
+      lore:
+        - "<gray>Confirm the purchase"
+      slot: 9-12
+    cancel:
+      title: "<red>Cancel"
+      material: RED_WOOl
+      lore:
+        - "<gray>Cancel the purchase"
+      slot: 14-17
+    fill-item:
+      material: AIR
+      slot: 0-8;18-26
 
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 3
+config-version: 5

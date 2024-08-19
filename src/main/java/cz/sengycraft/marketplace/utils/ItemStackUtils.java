@@ -40,7 +40,7 @@ public class ItemStackUtils {
         return new Pair<>(getSlots(section.getString("slot")), itemStack);
     }
 
-    private static HashSet<Integer> getSlots(String slot) {
+    public static HashSet<Integer> getSlots(String slot) {
 
         HashSet<Integer> slots = new HashSet<>();
 

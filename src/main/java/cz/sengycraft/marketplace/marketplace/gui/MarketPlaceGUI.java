@@ -88,7 +88,7 @@ public class MarketPlaceGUI {
                     if (databaseManager.findDocument(itemsCollectionName, "_id", new ObjectId(itemData.getObjectId())) != null) {
                         if (!itemData.getSeller().equalsIgnoreCase(buyer.getName())) {
                             if (VaultIntegration.hasMoney(buyer, itemData.getPrice())) {
-                                ConfirmationGUI.getConfirmationGUI(itemData, buyer).open(buyer);
+                                ConfirmationGUI.getConfirmationGUI(itemData, buyer, itemForSale).open(buyer);
                             } else {
                                 MessageUtils.sendMessage(buyer, "commands.marketplace.not-enough-money");
                                 refreshGUI(buyer);
