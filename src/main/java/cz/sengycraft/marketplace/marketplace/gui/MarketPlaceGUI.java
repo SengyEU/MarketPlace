@@ -15,9 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class MarketPlaceGUI {
 
@@ -88,7 +86,12 @@ public class MarketPlaceGUI {
                     if (databaseManager.findDocument(itemsCollectionName, "_id", new ObjectId(itemData.getObjectId())) != null) {
                         if (!itemData.getSeller().equalsIgnoreCase(buyer.getName())) {
                             if (VaultIntegration.hasMoney(buyer, itemData.getPrice())) {
-                                ConfirmationGUI.getConfirmationGUI(itemData, buyer, itemForSale).open(buyer);
+                                if((int) Arrays.stream(buyer.getInventory().getStorageContents()).filter(Objects::isNull).count() > 0) {
+                                    ConfirmationGUI.getConfirmationGUI(itemData, buyer, itemForSale).open(buyer);
+                                } else {
+                                    MessageUtils.sendMessage(buyer, "commands.marketplace.no-inventory-space");
+                                    refreshGUI(buyer);
+                                }
                             } else {
                                 MessageUtils.sendMessage(buyer, "commands.marketplace.not-enough-money");
                                 refreshGUI(buyer);
