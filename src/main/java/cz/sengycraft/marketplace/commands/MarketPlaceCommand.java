@@ -1,6 +1,8 @@
 package cz.sengycraft.marketplace.commands;
 
+import cz.sengycraft.marketplace.common.Permissions;
 import cz.sengycraft.marketplace.marketplace.gui.MarketPlaceGUI;
+import cz.sengycraft.marketplace.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -15,7 +17,17 @@ public class MarketPlaceCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            MessageUtils.sendMessage(sender,"commands.player-only");
+            return false;
+        }
+
         Player player = (Player) sender;
+
+        if (!player.hasPermission(Permissions.VIEW.permission())) {
+            MessageUtils.sendMessage(sender,"commands.no-permission");
+            return false;
+        }
 
         new MarketPlaceGUI().getMarketPlaceGUI(player).open(player);
 
