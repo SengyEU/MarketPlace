@@ -107,7 +107,7 @@ public class MarketPlaceGUI {
     }
 
     // TODO: Better implementation. For now, this is the best the Triumph GUI library can do.
-    private static void refreshGUI(Player player) {
+    public static void refreshGUI(Player player) {
         MarketPlaceGUI.getMarketPlaceGUI(player).open(player);
     }
 

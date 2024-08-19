@@ -1,9 +1,9 @@
 package cz.sengycraft.marketplace.marketplace.gui;
 
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
-import cz.sengycraft.marketplace.marketplace.gui.MarketPlaceGUI;
 import cz.sengycraft.marketplace.marketplace.items.ItemData;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
+import cz.sengycraft.marketplace.utils.MessageUtils;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
@@ -28,13 +28,16 @@ public class ConfirmationGUI {
                 .create();
 
         gui.setItem(11, ItemBuilder.from(Material.GREEN_WOOL).asGuiItem(inventoryClickEvent -> {
-            databaseManager.deleteDocument(itemsCollectionName, "_id", new ObjectId(itemData.getObjectId()));
-            buyer.getInventory().addItem(ItemStack.deserializeBytes(itemData.getItem()));
-            MarketPlaceGUI.getMarketPlaceGUI(buyer).open(buyer);
+            if (databaseManager.findDocument(itemsCollectionName, "_id", new ObjectId(itemData.getObjectId())) != null) {
+                databaseManager.deleteDocument(itemsCollectionName, "_id", new ObjectId(itemData.getObjectId()));
+                buyer.getInventory().addItem(ItemStack.deserializeBytes(itemData.getItem()));
+                MarketPlaceGUI.getMarketPlaceGUI(buyer).open(buyer);
+            } else {
+                MessageUtils.sendMessage(buyer, "commands.marketplace.item-not-available");
+                MarketPlaceGUI.refreshGUI(buyer);
+            }
         }));
-        gui.setItem(15, ItemBuilder.from(Material.RED_WOOL).asGuiItem(inventoryClickEvent -> {
-            MarketPlaceGUI.getMarketPlaceGUI(buyer).open(buyer);
-        }));
+        gui.setItem(15, ItemBuilder.from(Material.RED_WOOL).asGuiItem(inventoryClickEvent -> MarketPlaceGUI.getMarketPlaceGUI(buyer).open(buyer)));
 
         return gui;
     }
