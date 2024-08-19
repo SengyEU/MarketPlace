@@ -6,6 +6,7 @@ import cz.sengycraft.marketplace.commands.SellCommand;
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
 import cz.sengycraft.marketplace.listeners.MacroListener;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
+import cz.sengycraft.marketplace.utils.VaultIntegration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ public final class MarketPlacePlugin extends JavaPlugin {
                 configurationManager.getConfiguration("config").getString("database.mongo-client-uri"),
                 configurationManager.getConfiguration("config").getString("database.database-name")
         );
+
+        VaultIntegration.setup();
 
         getServer().getPluginManager().registerEvents(new MacroListener(), this);
 

@@ -2,6 +2,7 @@ name: MarketPlace
 version: '${project.version}'
 main: cz.sengycraft.marketplace.MarketPlacePlugin
 api-version: '1.20'
+depend: [Vault]
 commands:
   sell:
     description: "Lists the item in players hand in the marketplace for sale"

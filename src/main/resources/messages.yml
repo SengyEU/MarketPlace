@@ -10,9 +10,10 @@ commands:
   marketplace:
     item-not-available: "<red>This item is no longer available!"
     your-item: "<red>You can't purchase your own item!"
+    not-enough-money: "<red>You don't have enough money!"
   usage: "<red>Usage: {usage}" # Placeholders: {usage}
   player-only: "<red>This command can be only used by players!"
   no-permission: "You don't have permission to use this command!"
 
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 6
+config-version: 7

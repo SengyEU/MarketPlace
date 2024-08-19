@@ -4,10 +4,7 @@ import cz.sengycraft.marketplace.configuration.ConfigurationManager;
 import cz.sengycraft.marketplace.marketplace.items.ItemData;
 import cz.sengycraft.marketplace.marketplace.items.ItemManager;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
-import cz.sengycraft.marketplace.utils.ComponentUtils;
-import cz.sengycraft.marketplace.utils.ItemStackUtils;
-import cz.sengycraft.marketplace.utils.MessageUtils;
-import cz.sengycraft.marketplace.utils.Pair;
+import cz.sengycraft.marketplace.utils.*;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
@@ -74,7 +71,7 @@ public class MarketPlaceGUI {
                     )
             ));
             List<Component> originalLore = itemForSaleMeta.lore();
-            if(originalLore == null) originalLore = new ArrayList<>();
+            if (originalLore == null) originalLore = new ArrayList<>();
 
             originalLore.addAll(ComponentUtils.deserialize(MessageUtils.replacePlaceholders(
                     config.getStringList("gui.marketplace.items-for-sale.lore"),
@@ -89,11 +86,16 @@ public class MarketPlaceGUI {
             marketPlaceGUI.addItem(ItemBuilder.from(itemForSale).asGuiItem(inventoryClickEvent -> {
                 if (inventoryClickEvent.isLeftClick()) {
                     if (databaseManager.findDocument(itemsCollectionName, "_id", new ObjectId(itemData.getObjectId())) != null) {
-                        if(itemData.getSeller().equalsIgnoreCase(buyer.getName())) {
+                        if (!itemData.getSeller().equalsIgnoreCase(buyer.getName())) {
+                            if (VaultIntegration.hasMoney(buyer, itemData.getPrice())) {
+                                ConfirmationGUI.getConfirmationGUI(itemData, buyer).open(buyer);
+                            } else {
+                                MessageUtils.sendMessage(buyer, "commands.marketplace.not-enough-money");
+                                refreshGUI(buyer);
+                            }
+                        } else {
                             MessageUtils.sendMessage(buyer, "commands.marketplace.your-item");
                             refreshGUI(buyer);
-                        } else {
-                            ConfirmationGUI.getConfirmationGUI(itemData, buyer).open(buyer);
                         }
                     } else {
                         MessageUtils.sendMessage(buyer, "commands.marketplace.item-not-available");
