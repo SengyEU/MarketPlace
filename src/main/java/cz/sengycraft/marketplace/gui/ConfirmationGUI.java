@@ -1,5 +1,6 @@
 package cz.sengycraft.marketplace.gui;
 
+import cz.sengycraft.marketplace.discord.Webhook;
 import cz.sengycraft.marketplace.items.ItemData;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
 import cz.sengycraft.marketplace.transactions.TransactionData;
@@ -14,6 +15,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ConfirmationGUI extends BaseGUI {
@@ -114,6 +116,16 @@ public class ConfirmationGUI extends BaseGUI {
                 itemData.getSeller(),
                 LocalDateTime.now()
         ));
+
+        String message = config.getString("discord-webhook.message")
+                .replace("{itemName}", ComponentUtils.serializePlain(ItemStackUtils.getItemName(ItemStack.deserializeBytes(itemData.getItem()))))
+                .replace("{place}", blackMarket ? config.getString("discord-webhook.blackmarket") : config.getString("discord-webhook.marketplace"))
+                .replace("{seller}", itemData.getSeller())
+                .replace("{buyer}", buyer.getName())
+                .replace("{price}", String.valueOf(itemData.getPrice()))
+                .replace("{date}", LocalDateTime.now().format(DateTimeFormatter.ofPattern(config.getString("gui.transactions.transaction.date-format"))));
+
+        Webhook.sendWebhook(message);
     }
 
     private void handleCancelAction(Player buyer) {

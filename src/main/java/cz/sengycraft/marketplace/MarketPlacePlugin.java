@@ -6,9 +6,10 @@ import cz.sengycraft.marketplace.listeners.MacroListener;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
 import cz.sengycraft.marketplace.utils.VaultIntegration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.logging.Logger;
 
 public final class MarketPlacePlugin extends JavaPlugin {
 
@@ -48,7 +49,5 @@ public final class MarketPlacePlugin extends JavaPlugin {
     public void onDisable() {
         DatabaseManager.getInstance().close();
     }
-
-
 
 }

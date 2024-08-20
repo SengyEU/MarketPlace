@@ -99,11 +99,11 @@ gui:
       custom-model-data: 1001
       slot: 49
   transactions:
+    marketplace: "<gold>Marketplace"
+    blackmarket: "<gold>Blackmarket"
     title: "<green>Transactions history"
     rows: 6
     transaction:
-      marketplace: "<gold>Marketplace"
-      blackmarket: "<gold>Blackmarket"
       date-format: "dd. MM. yyyy HH:mm"
       bought:
         title: "{itemName}" # Placeholders: {itemName}
@@ -146,5 +146,12 @@ gui:
       custom-model-data: 1001
       slot: 49
 
+discord-webhook:
+  enabled: false
+  url: "https://discord.com/api/webhooks/..."
+  marketplace: "Marketplace"
+  blackmarket: "Blackmarket"
+  message: "**New Purchase!**\n\n**Item:** {itemName}\n**Place:** {place}\n**Seller:** {seller}\n**Buyer:** {buyer}\n**Price:** {price}\n**Date:** {date}" # Placeholders: {itemName}, {place}, {seller}, {buyer}, {price}, {date}
+
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 8
+config-version: 9

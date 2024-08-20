@@ -3,6 +3,7 @@ package cz.sengycraft.marketplace.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -28,6 +29,10 @@ public class ComponentUtils {
 
     public static String serialize(Component component) {
         return MiniMessage.miniMessage().serialize(component);
+    }
+
+    public static String serializePlain(Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component);
     }
 
 }
