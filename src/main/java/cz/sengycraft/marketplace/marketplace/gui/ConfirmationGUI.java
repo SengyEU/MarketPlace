@@ -131,7 +131,7 @@ public class ConfirmationGUI {
                 new Pair<>("{player}", buyer.getName()),
                 new Pair<>("{itemCount}", String.valueOf(modifiedItem.getAmount())),
                 new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(modifiedItem))),
-                new Pair<>("{price}", itemData.getHalfPriceFormatted())
+                new Pair<>("{price}", String.valueOf(itemData.getDoublePrice()))
         );
 
         int sellerPrice = blackMarket ? itemData.getDoublePrice() : itemData.getPrice();
