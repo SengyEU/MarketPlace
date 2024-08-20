@@ -2,6 +2,7 @@ database:
   mongo-client-uri: "mongodb+srv://exampleUser:examplePassword@cluster0.example.mongodb.net/"
   database-name: "marketplace"
   items-collection-name: "items"
+  transactions-collection-name: "transactions"
 
 commands:
   sell:
@@ -97,6 +98,53 @@ gui:
       material: NETHER_STAR
       custom-model-data: 1001
       slot: 49
+  transactions:
+    title: "<green>Transactions history"
+    rows: 6
+    transaction:
+      marketplace: "<gold>Marketplace"
+      blackmarket: "<gold>Blackmarket"
+      date-format: "dd. MM. yyyy HH:mm"
+      bought:
+        title: "{itemName}" # Placeholders: {itemName}
+        lore: # Placeholders: {place}, {seller}, {price}, {date}
+          - ""
+          - "<green>Bought on: <gold>{place}"
+          - "<green>Bought from: <gold>{seller}"
+          - "<green>Price: <gold>{price}"
+          - "<green>Date: <gold>{date}"
+          - ""
+      sold:
+        title: "{itemName}" # Placeholders: {itemName}
+        lore: # Placeholders: {place}, {buyer}, {price}, {date}
+          - ""
+          - "<green>Sold on: <gold>{place}"
+          - "<green>Sold to: <gold>{buyer}"
+          - "<green>Price: <gold>{price}"
+          - "<green>Date: <gold>{date}"
+          - ""
+    fill-item:
+      material: AIR
+      slot: 45-47;51-53
+    previous-page:
+      title: "<green>Previous page"
+      lore:
+        - "<gray>Click to go to the previous page"
+      material: ARROW
+      slot: 48
+    next-page:
+      title: "<green>Next page"
+      lore:
+        - "<gray>Click to go to the next page"
+      material: ARROW
+      slot: 50
+    refresh:
+      title: "<green>Refresh"
+      lore:
+        - "<gray>Refreshes the gui"
+      material: NETHER_STAR
+      custom-model-data: 1001
+      slot: 49
 
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 6
+config-version: 8

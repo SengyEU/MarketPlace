@@ -2,8 +2,8 @@ package cz.sengycraft.marketplace.commands;
 
 import cz.sengycraft.marketplace.common.Permissions;
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
-import cz.sengycraft.marketplace.marketplace.items.ItemData;
-import cz.sengycraft.marketplace.marketplace.items.ItemManager;
+import cz.sengycraft.marketplace.items.ItemData;
+import cz.sengycraft.marketplace.items.ItemManager;
 import cz.sengycraft.marketplace.utils.*;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.command.Command;
@@ -43,7 +43,7 @@ public class SellCommand implements TabExecutor {
             return false;
         }
 
-        if (!IntegerUtils.isInteger(args[0]) || Integer.parseInt(args[0]) <= 0) {
+        if (!NumberUtils.isInteger(args[0]) || Integer.parseInt(args[0]) <= 0) {
             sendMessage(sender,"commands.sell.invalid-price");
             return false;
         }

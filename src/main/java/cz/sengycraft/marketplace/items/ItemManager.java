@@ -1,12 +1,12 @@
-package cz.sengycraft.marketplace.marketplace.items;
+package cz.sengycraft.marketplace.items;
 
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bson.Document;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemManager {
 
@@ -32,14 +32,14 @@ public class ItemManager {
     }
 
     public List<ItemData> getItems() {
-
-        List<ItemData> items = new ArrayList<>();
-
-        for (Document document : databaseManager.getAllDocuments(itemsCollectionName)) {
-            items.add(new ItemData(document.getObjectId("_id").toHexString(), document.get("item", org.bson.types.Binary.class).getData(), document.getInteger("price"), document.getString("seller")));
-        }
-
-        return items;
+        return databaseManager.getAllDocuments(itemsCollectionName).stream()
+                .map(document -> new ItemData(
+                        document.getObjectId("_id").toHexString(),
+                        document.get("item", org.bson.types.Binary.class).getData(),
+                        document.getInteger("price"),
+                        document.getString("seller")))
+                .collect(Collectors.toList());
     }
+
 
 }

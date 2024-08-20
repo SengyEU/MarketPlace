@@ -1,7 +1,7 @@
 package cz.sengycraft.marketplace.commands;
 
 import cz.sengycraft.marketplace.common.Permissions;
-import cz.sengycraft.marketplace.gui.MarketPlaceGUI;
+import cz.sengycraft.marketplace.gui.TransactionsGUI;
 import cz.sengycraft.marketplace.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlackmarketCommand implements TabExecutor {
+public class TransactionsCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -24,12 +24,12 @@ public class BlackmarketCommand implements TabExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(Permissions.BLACKMARKET.permission())) {
+        if (!player.hasPermission(Permissions.HISTORY.permission())) {
             MessageUtils.sendMessage(sender,"commands.no-permission");
             return false;
         }
 
-        new MarketPlaceGUI(true).getMarketPlaceGUI(player).open(player);
+        new TransactionsGUI().getTransactionsGUI(player).open(player);
 
         return true;
     }

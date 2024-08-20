@@ -16,6 +16,9 @@ commands:
   blackmarket:
     description: "Generates a new shop from the /marketplace menu with 50% discounted prices from a selection of random items."
     permission: marketplace.blackmarket
+  transactions:
+    description: "Displays the player's transaction history."
+    permission: marketplace.history
 
 permissions:
   marketplace.sell:
@@ -26,3 +29,5 @@ permissions:
     description: "Access to /marketplace command"
   marketplace.blackmarket:
     description: "Access to /blackmarket command"
+  marketplace.history:
+    description: "Access to /transactions command"

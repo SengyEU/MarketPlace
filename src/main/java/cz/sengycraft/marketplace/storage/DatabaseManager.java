@@ -68,6 +68,17 @@ public class DatabaseManager {
         return documents;
     }
 
+    public List<Document> getAllDocuments(String collectionName, String key, Object value) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        List<Document> documents = new ArrayList<>();
+
+        for (Document document : collection.find(Filters.eq(key, value))) {
+            documents.add(document);
+        }
+
+        return documents;
+    }
+
     public void updateDocument(String collectionName, String key, String value, String updateKey, String updateValue) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Bson filter = Filters.eq(key, value);

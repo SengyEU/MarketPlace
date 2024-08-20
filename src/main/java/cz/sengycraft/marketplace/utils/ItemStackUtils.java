@@ -50,7 +50,7 @@ public class ItemStackUtils {
 
             if (part.contains("-")) {
                 String[] range = part.split("-");
-                if (range.length == 2 && IntegerUtils.isInteger(range[0]) && IntegerUtils.isInteger(range[1])) {
+                if (range.length == 2 && NumberUtils.isInteger(range[0]) && NumberUtils.isInteger(range[1])) {
                     int start = Integer.parseInt(range[0]);
                     int end = Integer.parseInt(range[1]);
 
@@ -64,7 +64,7 @@ public class ItemStackUtils {
                         }
                     }
                 }
-            } else if (IntegerUtils.isInteger(part)) {
+            } else if (NumberUtils.isInteger(part)) {
                 slots.add(Integer.parseInt(part));
             }
         }

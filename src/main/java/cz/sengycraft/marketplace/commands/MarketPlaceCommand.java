@@ -1,7 +1,7 @@
 package cz.sengycraft.marketplace.commands;
 
 import cz.sengycraft.marketplace.common.Permissions;
-import cz.sengycraft.marketplace.marketplace.gui.MarketPlaceGUI;
+import cz.sengycraft.marketplace.gui.MarketPlaceGUI;
 import cz.sengycraft.marketplace.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

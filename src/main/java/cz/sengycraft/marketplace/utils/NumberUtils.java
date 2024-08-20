@@ -1,6 +1,6 @@
 package cz.sengycraft.marketplace.utils;
 
-public class IntegerUtils {
+public class NumberUtils {
 
     public static boolean isInteger(String str) {
         if (str == null) {
@@ -24,6 +24,13 @@ public class IntegerUtils {
             }
         }
         return true;
+    }
+
+    public static String getDoubleFormatted(double number) {
+        if (number == (long) number)
+            return String.format("%d", (long) number);
+        else
+            return String.format("%s", number);
     }
 
 }

@@ -1,8 +1,8 @@
-package cz.sengycraft.marketplace.marketplace.gui;
+package cz.sengycraft.marketplace.gui;
 
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
-import cz.sengycraft.marketplace.marketplace.items.ItemData;
-import cz.sengycraft.marketplace.marketplace.items.ItemManager;
+import cz.sengycraft.marketplace.items.ItemData;
+import cz.sengycraft.marketplace.items.ItemManager;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
 import cz.sengycraft.marketplace.utils.*;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -26,7 +26,6 @@ public class MarketPlaceGUI {
     private final DatabaseManager databaseManager;
     private final YamlDocument config;
     private final String itemsCollectionName;
-
     private final boolean blackMarket;
 
     String configPath;

@@ -1,8 +1,10 @@
-package cz.sengycraft.marketplace.marketplace.gui;
+package cz.sengycraft.marketplace.gui;
 
 import cz.sengycraft.marketplace.configuration.ConfigurationManager;
-import cz.sengycraft.marketplace.marketplace.items.ItemData;
+import cz.sengycraft.marketplace.items.ItemData;
 import cz.sengycraft.marketplace.storage.DatabaseManager;
+import cz.sengycraft.marketplace.transactions.TransactionData;
+import cz.sengycraft.marketplace.transactions.TransactionsManager;
 import cz.sengycraft.marketplace.utils.*;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
@@ -15,10 +17,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class ConfirmationGUI {
 
@@ -120,10 +120,11 @@ public class ConfirmationGUI {
                 "commands." + configPath + ".success",
                 new Pair<>("{itemCount}", String.valueOf(modifiedItem.getAmount())),
                 new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(modifiedItem))),
-                new Pair<>("{price}", itemData.getHalfPriceFormatted())
+                new Pair<>("{price}", NumberUtils.getDoubleFormatted(price))
         );
 
         Player seller = Bukkit.getPlayer(itemData.getSeller());
+        int sellerPrice = blackMarket ? itemData.getDoublePrice() : itemData.getPrice();
 
         if(seller!= null) MessageUtils.sendMessage(
                 seller,
@@ -131,13 +132,22 @@ public class ConfirmationGUI {
                 new Pair<>("{player}", buyer.getName()),
                 new Pair<>("{itemCount}", String.valueOf(modifiedItem.getAmount())),
                 new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(modifiedItem))),
-                new Pair<>("{price}", String.valueOf(itemData.getDoublePrice()))
+                new Pair<>("{price}", String.valueOf(sellerPrice))
         );
-
-        int sellerPrice = blackMarket ? itemData.getDoublePrice() : itemData.getPrice();
 
         VaultIntegration.changeBalance(Bukkit.getOfflinePlayer(itemData.getSeller()), sellerPrice);
         VaultIntegration.changeBalance(buyer, -price);
+
+        TransactionsManager.getInstance().storeTransaction(new TransactionData(
+                itemData.getItem(),
+                blackMarket,
+                price,
+                sellerPrice,
+                buyer.getName(),
+                itemData.getSeller(),
+                LocalDateTime.now()
+        ));
+
     }
 
     private void handleCancelAction(Player buyer) {

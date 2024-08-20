@@ -1,4 +1,6 @@
-package cz.sengycraft.marketplace.marketplace.items;
+package cz.sengycraft.marketplace.items;
+
+import cz.sengycraft.marketplace.utils.NumberUtils;
 
 public class ItemData {
 
@@ -43,10 +45,7 @@ public class ItemData {
     }
 
     public String getHalfPriceFormatted() {
-        if (halfPrice == (long) halfPrice)
-            return String.format("%d", (long) halfPrice);
-        else
-            return String.format("%s", halfPrice);
+        return NumberUtils.getDoubleFormatted(halfPrice);
     }
 
     public double getHalfPrice() {
