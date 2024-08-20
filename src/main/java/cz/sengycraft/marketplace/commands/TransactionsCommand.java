@@ -18,14 +18,14 @@ public class TransactionsCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!(sender instanceof Player)) {
-            MessageUtils.sendMessage(sender,"commands.player-only");
+            MessageUtils.sendMessage(sender, "commands.player-only");
             return false;
         }
 
         Player player = (Player) sender;
 
         if (!player.hasPermission(Permissions.HISTORY.permission())) {
-            MessageUtils.sendMessage(sender,"commands.no-permission");
+            MessageUtils.sendMessage(sender, "commands.no-permission");
             return false;
         }
 

@@ -27,31 +27,31 @@ public class SellCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sendMessage(sender,"commands.player-only");
+            sendMessage(sender, "commands.player-only");
             return false;
         }
 
         Player player = (Player) sender;
 
         if (!player.hasPermission(Permissions.SELL.permission())) {
-            sendMessage(sender,"commands.no-permission");
+            sendMessage(sender, "commands.no-permission");
             return false;
         }
 
         if (args.length != 1) {
-            sendMessage(sender,"commands.usage", new Pair<>("{usage}", messages.getString("commands.sell.usage")));
+            sendMessage(sender, "commands.usage", new Pair<>("{usage}", messages.getString("commands.sell.usage")));
             return false;
         }
 
         if (!NumberUtils.isInteger(args[0]) || Integer.parseInt(args[0]) <= 0) {
-            sendMessage(sender,"commands.sell.invalid-price");
+            sendMessage(sender, "commands.sell.invalid-price");
             return false;
         }
 
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
 
         if (itemInMainHand.getType().isAir()) {
-            sendMessage(sender,"commands.sell.no-item");
+            sendMessage(sender, "commands.sell.no-item");
             return false;
         }
 

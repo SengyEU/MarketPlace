@@ -1,8 +1,6 @@
 package cz.sengycraft.marketplace.utils;
 
-import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -29,9 +27,9 @@ public class VaultIntegration {
     }
 
     public static void changeBalance(OfflinePlayer player, double amount) {
-        if(amount == 0) return;
+        if (amount == 0) return;
 
-        if(amount < 0) {
+        if (amount < 0) {
             amount = amount * -1;
             econ.withdrawPlayer(player, amount);
         } else {

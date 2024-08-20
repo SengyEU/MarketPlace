@@ -40,7 +40,7 @@ public class MessageUtils {
     public static List<String> replacePlaceholders(List<String> lines, Pair<String, String>... placeholders) {
         List<String> newLines = new ArrayList<>();
 
-        for(String line : lines) {
+        for (String line : lines) {
             for (Pair<String, String> placeholder : placeholders) {
                 line = line.replace(placeholder.getLeft(), placeholder.getRight());
             }

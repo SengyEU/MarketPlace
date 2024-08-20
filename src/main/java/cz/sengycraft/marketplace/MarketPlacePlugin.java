@@ -28,7 +28,6 @@ public final class MarketPlacePlugin extends JavaPlugin {
 
         DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-        databaseManager.setPlugin(this);
         databaseManager.init(
                 configurationManager.getConfiguration("config").getString("database.mongo-client-uri"),
                 configurationManager.getConfiguration("config").getString("database.database-name")

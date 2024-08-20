@@ -28,7 +28,7 @@ public class ItemStackUtils {
 
         ItemStack itemStack = new ItemStack(Material.valueOf(material.toUpperCase()));
 
-        if(!itemStack.getType().isAir()) {
+        if (!itemStack.getType().isAir()) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.displayName(ComponentUtils.deserialize(title));
             itemMeta.lore(ComponentUtils.deserialize(lore));

@@ -53,7 +53,7 @@ public abstract class BaseGUI {
 
     protected void setGuiControls(BaseGui gui, Player player, String configPathPrefix) {
         addGuiItem(gui, configPathPrefix + ".fill-item", null);
-        if(gui instanceof PaginatedGui paginatedGui) {
+        if (gui instanceof PaginatedGui paginatedGui) {
             addGuiItem(gui, configPathPrefix + ".previous-page", event -> paginatedGui.previous());
             addGuiItem(gui, configPathPrefix + ".refresh", event -> refreshGUI(player));
             addGuiItem(gui, configPathPrefix + ".next-page", event -> paginatedGui.next());
