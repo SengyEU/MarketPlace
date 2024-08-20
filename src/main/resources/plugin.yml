@@ -13,6 +13,9 @@ commands:
   marketplace:
     description: "Displays a list of all items currently for sale in the marketplace"
     permission: marketplace.view
+  blackmarket:
+    description: "Generates a new shop from the /marketplace menu with 50% discounted prices from a selection of random items."
+    permission: marketplace.blackmarket
 
 permissions:
   marketplace.sell:
@@ -21,3 +24,5 @@ permissions:
     description: "Access to /marketplacereload command"
   marketplace.view:
     description: "Access to /marketplace command"
+  marketplace.blackmarket:
+    description: "Access to /blackmarket command"

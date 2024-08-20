@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketPlaceCommand implements TabExecutor {
+public class BlackmarketCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -24,12 +24,12 @@ public class MarketPlaceCommand implements TabExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(Permissions.VIEW.permission())) {
+        if (!player.hasPermission(Permissions.BLACKMARKET.permission())) {
             MessageUtils.sendMessage(sender,"commands.no-permission");
             return false;
         }
 
-        new MarketPlaceGUI(false).getMarketPlaceGUI(player).open(player);
+        new MarketPlaceGUI(true).getMarketPlaceGUI(player).open(player);
 
         return true;
     }

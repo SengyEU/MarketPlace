@@ -27,7 +27,13 @@ public class MarketPlaceGUI {
     private final YamlDocument config;
     private final String itemsCollectionName;
 
-    public MarketPlaceGUI() {
+    private final boolean blackMarket;
+
+    String configPath;
+
+    public MarketPlaceGUI(boolean blackMarket) {
+        this.blackMarket = blackMarket;
+        configPath = blackMarket ? "blackmarket" : "marketplace";
         this.itemManager = ItemManager.getInstance();
         this.databaseManager = DatabaseManager.getInstance();
         ConfigurationManager configurationManager = ConfigurationManager.getInstance();
@@ -44,18 +50,18 @@ public class MarketPlaceGUI {
 
     private PaginatedGui createGui() {
         return Gui.paginated()
-                .title(ComponentUtils.deserialize(config.getString("gui.marketplace.title")))
-                .rows(config.getInt("gui.marketplace.rows"))
-                .pageSize((config.getInt("gui.marketplace.rows") - 1) * 9)
+                .title(ComponentUtils.deserialize(config.getString("gui." + configPath + ".title")))
+                .rows(config.getInt("gui." + configPath + ".rows"))
+                .pageSize((config.getInt("gui." + configPath + ".rows") - 1) * 9)
                 .disableAllInteractions()
                 .create();
     }
 
     private void setGuiControls(PaginatedGui gui, Player buyer) {
-        addGuiItem(gui, "gui.marketplace.fill-item", null);
-        addGuiItem(gui, "gui.marketplace.previous-page", event -> gui.previous());
-        addGuiItem(gui, "gui.marketplace.refresh", event -> refreshGUI(buyer));
-        addGuiItem(gui, "gui.marketplace.next-page", event -> gui.next());
+        addGuiItem(gui, "gui." + configPath + ".fill-item", null);
+        addGuiItem(gui, "gui." + configPath + ".previous-page", event -> gui.previous());
+        addGuiItem(gui, "gui." + configPath + ".refresh", event -> refreshGUI(buyer));
+        addGuiItem(gui, "gui." + configPath + ".next-page", event -> gui.next());
     }
 
     private void addGuiItem(PaginatedGui gui, String configPath, GuiAction<InventoryClickEvent> action) {
@@ -70,28 +76,47 @@ public class MarketPlaceGUI {
     }
 
     private void populateItemsForSale(PaginatedGui gui, Player buyer) {
-        for (ItemData itemData : itemManager.getItems()) {
+        int maxItems = blackMarket ? config.getInt("gui.blackmarket.max-items") : Integer.MAX_VALUE;
+
+        int itemCount = 0;
+
+        List<ItemData> items = itemManager.getItems();
+
+        if (blackMarket) {
+            List<ItemData> itemsClone = new ArrayList<>(items);
+            Collections.shuffle(itemsClone);
+            items = itemsClone;
+        }
+
+        for (ItemData itemData : items) {
+            if (itemCount >= maxItems) break;
+
             ItemStack itemForSale = ItemStack.deserializeBytes(itemData.getItem());
             setItemMeta(itemForSale, itemData);
 
             gui.addItem(ItemBuilder.from(itemForSale).asGuiItem(event -> handleItemClick(event, itemData, buyer, itemForSale)));
+
+            itemCount++;
         }
     }
+
 
     private void setItemMeta(ItemStack itemForSale, ItemData itemData) {
         ItemMeta itemMeta = itemForSale.getItemMeta();
 
         String itemTitle = MessageUtils.replacePlaceholders(
-                config.getString("gui.marketplace.items-for-sale.title"),
+                config.getString("gui." + configPath + ".items-for-sale.title"),
                 new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(itemForSale)))
         );
         itemMeta.displayName(ComponentUtils.deserialize(itemTitle));
 
+        String price = blackMarket ? itemData.getHalfPriceFormatted() : String.valueOf(itemData.getPrice());
+
         List<Component> lore = Optional.ofNullable(itemMeta.lore()).orElse(new ArrayList<>());
         lore.addAll(ComponentUtils.deserialize(MessageUtils.replacePlaceholders(
-                config.getStringList("gui.marketplace.items-for-sale.lore"),
+                config.getStringList("gui." + configPath + ".items-for-sale.lore"),
                 new Pair<>("{seller}", itemData.getSeller()),
-                new Pair<>("{price}", String.valueOf(itemData.getPrice()))
+                new Pair<>("{price}", price)
         )));
         itemMeta.lore(lore);
 
@@ -113,7 +138,9 @@ public class MarketPlaceGUI {
             return;
         }
 
-        if (!VaultIntegration.hasMoney(buyer, itemData.getPrice())) {
+        double price = blackMarket ? itemData.getHalfPrice() : itemData.getPrice();
+
+        if (!VaultIntegration.hasMoney(buyer, price)) {
             MessageUtils.sendMessage(buyer, "commands.marketplace.not-enough-money");
             refreshGUI(buyer);
             return;
@@ -125,7 +152,7 @@ public class MarketPlaceGUI {
             return;
         }
 
-        new ConfirmationGUI().getConfirmationGUI(itemData, buyer, itemForSale).open(buyer);
+        new ConfirmationGUI(blackMarket).getConfirmationGUI(itemData, buyer, itemForSale).open(buyer);
     }
 
     private boolean isItemAvailable(ItemData itemData) {

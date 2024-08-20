@@ -25,11 +25,12 @@ public class ConfirmationGUI {
     private final DatabaseManager databaseManager;
     private final YamlDocument config;
 
-    private static final String ITEM_NAME_PLACEHOLDER = "{itemName}";
-    private static final String ITEM_COUNT_PLACEHOLDER = "{itemCount}";
-    private static final String PRICE_PLACEHOLDER = "{price}";
+    private final boolean blackMarket;
+    String configPath;
 
-    public ConfirmationGUI() {
+    public ConfirmationGUI(boolean blackMarket) {
+        this.blackMarket = blackMarket;
+        configPath = blackMarket ? "blackmarket" : "marketplace";
         this.databaseManager = DatabaseManager.getInstance();
         ConfigurationManager configurationManager = ConfigurationManager.getInstance();
         this.config = configurationManager.getConfiguration("config");
@@ -44,7 +45,7 @@ public class ConfirmationGUI {
     private Gui createGui(ItemData itemData) {
         String title = MessageUtils.replacePlaceholders(
                 config.getString("gui.confirmation.title"),
-                new Pair<>(ITEM_NAME_PLACEHOLDER, ComponentUtils.serialize(ItemStackUtils.getItemName(ItemStack.deserializeBytes(itemData.getItem()))))
+                new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(ItemStack.deserializeBytes(itemData.getItem()))))
         );
 
         return Gui.gui()
@@ -98,7 +99,9 @@ public class ConfirmationGUI {
             return;
         }
 
-        if (!VaultIntegration.hasMoney(buyer, itemData.getPrice())) {
+        double price = blackMarket ? itemData.getHalfPrice() : itemData.getPrice();
+
+        if (!VaultIntegration.hasMoney(buyer, price)) {
             MessageUtils.sendMessage(buyer, "commands.marketplace.not-enough-money");
             openMarketPlaceGui(buyer);
             return;
@@ -114,14 +117,27 @@ public class ConfirmationGUI {
         openMarketPlaceGui(buyer);
         sendMessage(
                 buyer,
-                "commands.marketplace.success",
-                new Pair<>(ITEM_COUNT_PLACEHOLDER, String.valueOf(modifiedItem.getAmount())),
-                new Pair<>(ITEM_NAME_PLACEHOLDER, ComponentUtils.serialize(ItemStackUtils.getItemName(modifiedItem))),
-                new Pair<>(PRICE_PLACEHOLDER, String.valueOf(itemData.getPrice()))
+                "commands." + configPath + ".success",
+                new Pair<>("{itemCount}", String.valueOf(modifiedItem.getAmount())),
+                new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(modifiedItem))),
+                new Pair<>("{price}", itemData.getHalfPriceFormatted())
         );
 
-        VaultIntegration.changeBalance(Bukkit.getOfflinePlayer(itemData.getSeller()), itemData.getPrice());
-        VaultIntegration.changeBalance(buyer, -itemData.getPrice());
+        Player seller = Bukkit.getPlayer(itemData.getSeller());
+
+        if(seller!= null) MessageUtils.sendMessage(
+                seller,
+                "commands." + configPath + ".success-seller",
+                new Pair<>("{player}", buyer.getName()),
+                new Pair<>("{itemCount}", String.valueOf(modifiedItem.getAmount())),
+                new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(modifiedItem))),
+                new Pair<>("{price}", itemData.getHalfPriceFormatted())
+        );
+
+        int sellerPrice = blackMarket ? itemData.getDoublePrice() : itemData.getPrice();
+
+        VaultIntegration.changeBalance(Bukkit.getOfflinePlayer(itemData.getSeller()), sellerPrice);
+        VaultIntegration.changeBalance(buyer, -price);
     }
 
     private void handleCancelAction(Player buyer) {
@@ -130,7 +146,7 @@ public class ConfirmationGUI {
     }
 
     private void openMarketPlaceGui(Player buyer) {
-        new MarketPlaceGUI().getMarketPlaceGUI(buyer).open(buyer);
+        new MarketPlaceGUI(blackMarket).getMarketPlaceGUI(buyer).open(buyer);
     }
 
     private boolean hasInventorySpace(Player player) {

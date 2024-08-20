@@ -62,6 +62,41 @@ gui:
     fill-item:
       material: AIR
       slot: 0-8;18-26
+  blackmarket:
+    title: "<black>Blackmarket"
+    max-items: 25
+    rows: 6
+    items-for-sale:
+      title: "{itemName}" # Placeholders: {itemName}
+      lore: # Placeholders: {seller}, {price}
+        - ""
+        - "<green>Seller: <gold>{seller}"
+        - "<green>Price: <gold>{price}"
+        - ""
+        - "<green>Click to purchase!"
+        - ""
+    fill-item:
+      material: AIR
+      slot: 45-47;51-53
+    previous-page:
+      title: "<green>Previous page"
+      lore:
+        - "<gray>Click to go to the previous page"
+      material: ARROW
+      slot: 48
+    next-page:
+      title: "<green>Next page"
+      lore:
+        - "<gray>Click to go to the next page"
+      material: ARROW
+      slot: 50
+    refresh:
+      title: "<green>Refresh"
+      lore:
+        - "<gray>Refreshes the gui"
+      material: NETHER_STAR
+      custom-model-data: 1001
+      slot: 49
 
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 5
+config-version: 6

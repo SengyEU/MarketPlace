@@ -3,7 +3,7 @@ commands:
     usage: "<dark_red>/sell <price>"
     no-item: "<red>You don't have an item in your main hand!"
     invalid-price: "<red>Invalid price! Please input a positive integer!"
-    success: "<green>Successfully listed <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>on the marketplace!" # Placeholders: {count}, {itemName}, {price}
+    success: "<green>Successfully listed <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>on the marketplace!" # Placeholders: {itemCount}, {itemName}, {price}
   reload:
     error: "<red>Couldn't reload configs. Check console for more details!"
     success: "<green>Reloaded!"
@@ -12,11 +12,15 @@ commands:
     your-item: "<red>You can't purchase your own item!"
     not-enough-money: "<red>You don't have enough money!"
     no-inventory-space: "<red>You don't have space in your inventory!"
-    success: "<green>Successfully purchased <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>from the marketplace!"
+    success: "<green>Successfully purchased <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>from the marketplace!" # Placeholders: {itemCount}, {itemName}, {price}
+    success-seller: "<green>Player <gold>{player}<green> purchased your item <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>from the marketplace!" # Placeholders: {player}, {itemCount}, {itemName}, {price}
     cancel: "<red>Purchase cancelled!"
+  blackmarket:
+    success: "<green>Successfully purchased <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>from the blackmarket!" # Placeholders: {itemCount}, {itemName}, {price}
+    success-seller: "<green>Player <gold>{player}<green> purchased your item <gold>{itemCount}x {itemName}<green> for <gold>{price}$ <green>from the blackmarket!" # Placeholders: {player}, {itemCount}, {itemName}, {price}
   usage: "<red>Usage: {usage}" # Placeholders: {usage}
   player-only: "<red>This command can be only used by players!"
   no-permission: "You don't have permission to use this command!"
 
 # DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
-config-version: 9
+config-version: 10
