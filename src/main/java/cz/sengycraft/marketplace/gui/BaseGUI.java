@@ -43,9 +43,9 @@ public abstract class BaseGUI {
                 .create();
     }
 
-    protected Gui createGui() {
+    protected Gui createGui(String titleReplacement) {
         return Gui.gui()
-                .title(ComponentUtils.deserialize(config.getString("gui.confirmation.title")))
+                .title(ComponentUtils.deserialize(MessageUtils.replacePlaceholders(config.getString("gui.confirmation.title"), new Pair<>("{itemName}", titleReplacement))))
                 .rows(config.getInt("gui.confirmation.rows"))
                 .disableAllInteractions()
                 .create();

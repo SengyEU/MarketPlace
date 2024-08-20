@@ -33,7 +33,7 @@ public class ConfirmationGUI extends BaseGUI {
     }
 
     public Gui getConfirmationGUI(ItemData itemData, Player buyer, ItemStack modifiedItem) {
-        Gui gui = createGui();
+        Gui gui = createGui(ComponentUtils.serialize(ItemStackUtils.getItemName(ItemStack.deserializeBytes(itemData.getItem()))));
         configureGuiActions(gui, itemData, buyer, modifiedItem);
         return gui;
     }
