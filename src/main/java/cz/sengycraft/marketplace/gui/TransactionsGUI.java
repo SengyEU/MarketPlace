@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class TransactionsGUI extends BaseGUI {
 
@@ -27,17 +28,22 @@ public class TransactionsGUI extends BaseGUI {
     public PaginatedGui getTransactionsGUI(Player player) {
         PaginatedGui transactionsGUI = createPaginatedGui("gui.transactions.title", "gui.transactions.rows");
         setGuiControls(transactionsGUI, player, "gui.transactions");
-        populateTransactions(transactionsGUI, player.getName());
+        populateTransactions(transactionsGUI, player.getName()); // Now handled asynchronously
         return transactionsGUI;
     }
 
     private void populateTransactions(PaginatedGui gui, String playerName) {
-        List<Pair<TransactionData, Boolean>> transactionData = transactionsManager.getTransactions(playerName);
-        for (Pair<TransactionData, Boolean> data : transactionData) {
-            ItemStack transaction = ItemStack.deserializeBytes(data.getLeft().getItem());
-            setItemMeta(transaction, data);
-            gui.addItem(ItemBuilder.from(transaction).asGuiItem());
-        }
+        transactionsManager.getTransactions(playerName).thenAccept(transactionData -> {
+            for (Pair<TransactionData, Boolean> data : transactionData) {
+                ItemStack transaction = ItemStack.deserializeBytes(data.getLeft().getItem());
+                setItemMeta(transaction, data);
+                gui.addItem(ItemBuilder.from(transaction).asGuiItem());
+            }
+            gui.update();
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
+        });
     }
 
     private void setItemMeta(ItemStack transaction, Pair<TransactionData, Boolean> data) {
@@ -45,6 +51,7 @@ public class TransactionsGUI extends BaseGUI {
         TransactionData transactionData = data.getLeft();
         boolean isSeller = data.getRight();
         String path = isSeller ? "sold" : "bought";
+
         String itemTitle = MessageUtils.replacePlaceholders(
                 config.getString("gui.transactions.transaction." + path + ".title"),
                 new Pair<>("{itemName}", ComponentUtils.serialize(ItemStackUtils.getItemName(transaction)))

@@ -10,6 +10,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class TransactionsManager {
 
@@ -17,55 +19,67 @@ public class TransactionsManager {
 
     public static TransactionsManager getInstance() {
         if (instance == null) instance = new TransactionsManager();
-
         return instance;
     }
 
-    DatabaseManager databaseManager = DatabaseManager.getInstance();
-    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
-    YamlDocument config = configurationManager.getConfiguration("config");
-    String transactionsCollectionName = config.getString("database.transactions-collection-name");
+    private final DatabaseManager databaseManager = DatabaseManager.getInstance();
+    private final ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    private final YamlDocument config = configurationManager.getConfiguration("config");
+    private final String transactionsCollectionName = config.getString("database.transactions-collection-name");
 
-    public void storeTransaction(TransactionData transactionData) {
-        Document document = new Document("item", transactionData.getItem());
-        document.append("blackmarket", transactionData.isBlackmarket());
-        document.append("priceBuyer", transactionData.getPriceBuyer());
-        document.append("priceSeller", transactionData.getPriceSeller());
-        document.append("buyer", transactionData.getBuyer());
-        document.append("seller", transactionData.getSeller());
-        document.append("date", transactionData.getDate());
+    public CompletableFuture<Void> storeTransaction(TransactionData transactionData) {
+        Document document = new Document("item", transactionData.getItem())
+                .append("blackmarket", transactionData.isBlackmarket())
+                .append("priceBuyer", transactionData.getPriceBuyer())
+                .append("priceSeller", transactionData.getPriceSeller())
+                .append("buyer", transactionData.getBuyer())
+                .append("seller", transactionData.getSeller())
+                .append("date", transactionData.getDate());
 
-        databaseManager.insertDocument(transactionsCollectionName, document);
+        return databaseManager.insertDocument(transactionsCollectionName, document);
     }
 
-    public List<Pair<TransactionData, Boolean>> getTransactions(String playerName) {
-        List<Pair<TransactionData, Boolean>> data = new ArrayList<>();
+    public CompletableFuture<List<Pair<TransactionData, Boolean>>> getTransactions(String playerName) {
+        CompletableFuture<List<Pair<TransactionData, Boolean>>> buyerTransactionsFuture = databaseManager
+                .getAllDocuments(transactionsCollectionName, "buyer", playerName)
+                .thenApply(documents -> documents.stream()
+                        .map(document -> new Pair<>(
+                                new TransactionData(
+                                        document.get("item", org.bson.types.Binary.class).getData(),
+                                        document.getBoolean("blackmarket"),
+                                        document.getDouble("priceBuyer"),
+                                        document.getInteger("priceSeller"),
+                                        document.getString("buyer"),
+                                        document.getString("seller"),
+                                        Instant.ofEpochMilli(document.getDate("date").getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                                ), false))
+                        .collect(Collectors.toList())
+                );
 
-        databaseManager.getAllDocuments(transactionsCollectionName, "buyer", playerName).stream()
-                .map(document -> new TransactionData(
-                        document.get("item", org.bson.types.Binary.class).getData(),
-                        document.getBoolean("blackmarket"),
-                        document.getDouble("priceBuyer"),
-                        document.getInteger("priceSeller"),
-                        document.getString("buyer"),
-                        document.getString("seller"),
-                        Instant.ofEpochMilli(document.getDate("date").getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime()))
-                .forEach(transactionData -> data.add(new Pair<>(transactionData, false)));
+        CompletableFuture<List<Pair<TransactionData, Boolean>>> sellerTransactionsFuture = databaseManager
+                .getAllDocuments(transactionsCollectionName, "seller", playerName)
+                .thenApply(documents -> documents.stream()
+                        .map(document -> new Pair<>(
+                                new TransactionData(
+                                        document.get("item", org.bson.types.Binary.class).getData(),
+                                        document.getBoolean("blackmarket"),
+                                        document.getDouble("priceBuyer"),
+                                        document.getInteger("priceSeller"),
+                                        document.getString("buyer"),
+                                        document.getString("seller"),
+                                        Instant.ofEpochMilli(document.getDate("date").getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                                ), true))
+                        .collect(Collectors.toList())
+                );
 
-        databaseManager.getAllDocuments(transactionsCollectionName, "seller", playerName).stream()
-                .map(document -> new TransactionData(
-                        document.get("item", org.bson.types.Binary.class).getData(),
-                        document.getBoolean("blackmarket"),
-                        document.getDouble("priceBuyer"),
-                        document.getInteger("priceSeller"),
-                        document.getString("buyer"),
-                        document.getString("seller"),
-                        Instant.ofEpochMilli(document.getDate("date").getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime()))
-                .forEach(transactionData -> data.add(new Pair<>(transactionData, true)));
+        return buyerTransactionsFuture.thenCombine(sellerTransactionsFuture, (buyerTransactions, sellerTransactions) -> {
+            List<Pair<TransactionData, Boolean>> allTransactions = new ArrayList<>();
+            allTransactions.addAll(buyerTransactions);
+            allTransactions.addAll(sellerTransactions);
 
-        data.sort((pair1, pair2) -> pair2.getLeft().getDate().compareTo(pair1.getLeft().getDate()));
+            allTransactions.sort((pair1, pair2) -> pair2.getLeft().getDate().compareTo(pair1.getLeft().getDate()));
 
-        return data;
+            return allTransactions;
+        });
     }
-
 }
